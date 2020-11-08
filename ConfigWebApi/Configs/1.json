@@ -1,0 +1,7 @@
+{
+  "endpoint": "http://test.com",
+  "timeout": 1000,
+  "isRetry": true,
+  "attempts": 10
+}
+

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ConfigCommon;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -14,7 +15,7 @@ namespace ConfigWebApi.Controllers
     [ApiController]
     public class EndpointConfigController : ConfigController<EndpointConfig>
     {
-        public EndpointConfigController(IOptions<AppSettings> appSettingsOptions) 
-            : base(appSettingsOptions) { }
+        public EndpointConfigController(IOptions<AppSettings> appSettingsOptions, IWebHostEnvironment env) 
+            : base(appSettingsOptions, env) { }
     }
 }

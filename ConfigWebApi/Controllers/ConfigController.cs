@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ConfigCommon;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -15,31 +17,32 @@ namespace ConfigWebApi.Controllers
         where TConfig : ConfigBase
     {
         AppSettings _settings;
+        IWebHostEnvironment _env;
 
-        public ConfigController(IOptions<AppSettings> appSettingsOptions)
+        public ConfigController(IOptions<AppSettings> appSettingsOptions, IWebHostEnvironment env)
         {
             _settings = appSettingsOptions.Value;
+            _env = env;
         }
 
         [HttpGet("{name}")]
         public TConfig Get(string name)
         {
-            try
-            {
-                var repo = new ConfigRepository<TConfig>(_settings.ConfigsPath);
-                return repo.FindByName(name);
-            }
-            catch
-            {
-                return null;
-            }
+            var repo = GetRepo();
+            return repo.FindByName(name);
         }
 
         [HttpPut("{name}")]
         public void Put(string name, [FromBody] TConfig config)
         {
-            var repo = new ConfigRepository<TConfig>(_settings.ConfigsPath);
+            var repo = GetRepo();
             repo.Update(name, config);
+        }
+
+        private ConfigRepository<TConfig> GetRepo()
+        {
+            return new ConfigRepository<TConfig>(
+                Path.Combine(_env.ContentRootPath, _settings.ConfigsPath));
         }
     }
 }

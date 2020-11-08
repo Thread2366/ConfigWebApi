@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ConfigCommon;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -14,7 +15,7 @@ namespace ConfigWebApi.Controllers
     [ApiController]
     public class RequestConfigController : ConfigController<RequestConfig>
     {
-        public RequestConfigController(IOptions<AppSettings> appSettingsOptions)
-            : base(appSettingsOptions) { }
+        public RequestConfigController(IOptions<AppSettings> appSettingsOptions, IWebHostEnvironment env)
+            : base(appSettingsOptions, env) { }
     }
 }

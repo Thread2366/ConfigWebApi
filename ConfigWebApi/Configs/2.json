@@ -1,0 +1,7 @@
+{
+  "Url": "Url",
+  "Timeout": 30000,
+  "Browser": "Browser",
+  "Content": "Content",
+  "ContentLength": 7
+}

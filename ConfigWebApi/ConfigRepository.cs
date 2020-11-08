@@ -25,11 +25,15 @@ namespace ConfigWebApi
             var configJson = File.ReadAllText(Path.Combine(ConfigsPath, $"{name}.json"));
             try
             {
-                return JsonConvert.DeserializeObject<TConfig>(configJson);
+                var jSettings = new JsonSerializerSettings()
+                {
+                    MissingMemberHandling = MissingMemberHandling.Error
+                };
+                return JsonConvert.DeserializeObject<TConfig>(configJson, jSettings);
             }
             catch (JsonException jex)
             {
-                throw new Exception("Invalid config type", jex);
+                throw new ConfigException("Invalid config type", jex);
             }
         }
 
@@ -45,7 +49,7 @@ namespace ConfigWebApi
         {
             var file = Directory.EnumerateFiles(ConfigsPath)
                 .FirstOrDefault(f => Path.GetFileNameWithoutExtension(f) == name);
-            if (file == null) throw new FileNotFoundException($"Config {name} not found by its name");
+            if (file == null) throw new ConfigException($"Config {name} not found by its name");
             return file;
         }
     }
